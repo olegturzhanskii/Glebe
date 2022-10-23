@@ -42,7 +42,7 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-#### 🕵 Do not forget to essential environment variables:
+#### 🕵 Do not forget to include essential environment variables:
 
 ```shell
 API_TOKEN
