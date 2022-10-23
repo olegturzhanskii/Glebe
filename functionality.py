@@ -130,9 +130,9 @@ def get_list_of_challenges() -> Challenges:
     soup = BeautifulSoup(_parse_challenges(), 'lxml')
     matches = soup.find_all(class_="TermText notranslate lang-en")
     challenges = {
-        matches[_ - 1].text: source if (
-                                           source := matches[_].text
-                                       ) != '...' else None for _ in range(
+        matches[match - 1].text: source if (
+                                           source := matches[match].text
+                                       ) != '...' else None for match in range(
             1,
             len(
                 matches
