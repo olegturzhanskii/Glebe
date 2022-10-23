@@ -117,12 +117,13 @@ def browse_with_change(flag: bool, /):
     return browse
 
 
-def _parse_challenges() -> str | BeautifulSoup:
-    r = requests.get(QUIZLET_LINK[:-4], headers=headers)
+def _parse_challenges() -> str:
+    url = QUIZLET_LINK[:-4]
+    r = requests.get(url, headers=headers)
     if r.ok:
         return r.text
     else:
-        return 'Failed to access the current website.'
+        return f'Failed to access the current website {url}.'
 
 
 def get_list_of_challenges() -> Challenges:
@@ -217,18 +218,18 @@ def _parse_word(word: str) -> str:
     if r.ok:
         return r.text
     else:
-        return f'Failed to access the website {url}'
+        return f'Failed to access the current website {url}.'
 
 
 def pronounce_word(word: str) -> list[Pronunciations, ...] | list:
     soup = BeautifulSoup(_parse_word(word), 'lxml')
     matches = soup.find_all(class_="pos-header dpos-h")
     pronunciations = []
-    for _ in matches:
+    for match in matches:
         try:
-            audio = f'https://dictionary.cambridge.org/us{_.find(type="audio/mpeg")["src"]}'
-            part_of_speech = _.find(class_='pos dpos').text
-            transcription = _.find(class_="ipa dipa").text
+            audio = f'https://dictionary.cambridge.org/us{match.find(type="audio/mpeg")["src"]}'
+            part_of_speech = match.find(class_='pos dpos').text
+            transcription = match.find(class_="ipa dipa").text
         except (ValueError, TypeError):
             continue
         pronunciations.append(Pronunciations(part_of_speech, audio, transcription))
